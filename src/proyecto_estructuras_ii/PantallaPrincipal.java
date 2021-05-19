@@ -28,6 +28,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel_BG = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel_FileX = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         MenuPrincipal = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         newFile = new javax.swing.JMenuItem();
@@ -54,8 +59,32 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         exportXML = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        jPanel_BG.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jPanel_BG.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 610, 430));
+
+        jLabel_FileX.setBackground(new java.awt.Color(255, 51, 51));
+        jLabel_FileX.setFont(new java.awt.Font("BankGothic Md BT", 2, 48)); // NOI18N
+        jLabel_FileX.setForeground(new java.awt.Color(254, 150, 119));
+        jLabel_FileX.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel_FileX.setText("File X");
+        jLabel_FileX.setAutoscrolls(true);
+        jLabel_FileX.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 51)));
+        jLabel_FileX.setFocusable(false);
+        jPanel_BG.add(jLabel_FileX, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 360, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto_estructuras_ii/bg4.png"))); // NOI18N
+        jLabel1.setFocusable(false);
+        jPanel_BG.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 1130, 630));
 
         Archivo.setText("Archivo");
+        Archivo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newFile.setText("Nuevo Archivo");
         Archivo.add(newFile);
@@ -75,6 +104,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Archivo);
 
         Campos.setText("Campos");
+        Campos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newCampo.setText("Nuevo Campo");
         Campos.add(newCampo);
@@ -91,6 +121,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Campos);
 
         Registros.setText("Registros");
+        Registros.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         introRegistros.setText("Introducir Registros");
         Registros.add(introRegistros);
@@ -110,6 +141,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Registros);
 
         Indices.setText("Indices");
+        Indices.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newIndex.setText("Crear Indices");
         Indices.add(newIndex);
@@ -120,6 +152,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Indices);
 
         Estandarizacion.setText("Estandarizacion");
+        Estandarizacion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         exportExcel.setText("Exportar en archivo Excel");
         Estandarizacion.add(exportExcel);
@@ -135,11 +168,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel_BG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel_BG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -194,6 +229,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem exportExcel;
     private javax.swing.JMenuItem exportXML;
     private javax.swing.JMenuItem introRegistros;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel_FileX;
+    private javax.swing.JPanel jPanel_BG;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuItem listCampos;
     private javax.swing.JMenuItem listRegistros;
     private javax.swing.JMenuItem modCampos;

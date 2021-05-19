@@ -1,7 +1,5 @@
 package proyecto_estructuras_ii;
 
-import java.util.ArrayList;
-
 /**Implementación de LinkedList que se utilizará como AvailList.
  * 
  * @author Andrés Nuila
@@ -16,8 +14,8 @@ public class LinkedList<T> {
     private int nElementos;
 
     public LinkedList() {
-        this.cabeza = new Node<>();
-        this.cola = new Node<>();
+        this.cabeza = new Nodo<>();
+        this.cola = new Nodo<>();
 
         conectar(this.cabeza, this.cola);
 
@@ -55,7 +53,7 @@ public class LinkedList<T> {
      * @param posicion posicion donde se insertará en la lista
      * @param data el elemento a insertar
      * @return true si se realizó correctamente la inserción, false de otro modo
-     */
+     
     public boolean insertar(int posicion, T data) {
         if (posicion < 0 || posicion > nElementos) {
             return false;
@@ -93,6 +91,7 @@ public class LinkedList<T> {
             }
         }
     }
+    * */
 
     /**Inserta un nodo entre los nodos especificados. 
      * 
@@ -100,8 +99,8 @@ public class LinkedList<T> {
      * @param prev Nodo después del cual se insertará
      * @param next Nodo antes del cual se insertará
      */
-    private void insertarEntre(Node<T> newest, Node<T> prev, Node<T> next) {
-        if(newest != null && previo != null && next != null) {
+    private void insertarEntre(Nodo<T> newest, Nodo<T> prev, Nodo<T> next) {
+        if(newest != null && prev != null && next != null) {
             newest.setAnterior(prev);
             newest.setSiguiente(next);
             next.setAnterior(newest);
@@ -111,7 +110,7 @@ public class LinkedList<T> {
 
     /**Conecta dos nodos contiguamente, sin modificar sus otros parámetros.
      */
-    private void conectar(Node<T> primero, Node<T> segundo) {
+    private void conectar(Nodo<T> primero, Nodo<T> segundo) {
         primero.setSiguiente(segundo);
         segundo.setAnterior(primero);
     }
@@ -124,7 +123,7 @@ public class LinkedList<T> {
      */
     public T obtener(int posicion) throws IndexOutOfBoundsException  {
         // Este método verifica que la posición sea válida
-        Node<T> nodo = obtenerNodo(posicion);
+        Nodo<T> nodo = obtenerNodo(posicion);
 
         return nodo.getData();
     }
@@ -132,7 +131,7 @@ public class LinkedList<T> {
     /**Elimina todos los elementos en la lista.
      */
     public void anular() {
-        Node<T> walk = this.cabeza.getSiguiente();
+        Nodo<T> walk = this.cabeza.getSiguiente();
         while (walk != this.cola) {
             Nodo<T> temp = walk.getSiguiente();
 
