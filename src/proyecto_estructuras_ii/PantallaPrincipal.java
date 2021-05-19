@@ -5,6 +5,19 @@
  */
 package proyecto_estructuras_ii;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author enuil
@@ -28,6 +41,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        listCamposPantalla = new javax.swing.JDialog();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        taCampos = new javax.swing.JTextArea();
+        camposLabel = new javax.swing.JLabel();
         MenuPrincipal = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         newFile = new javax.swing.JMenuItem();
@@ -53,17 +70,62 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         exportExcel = new javax.swing.JMenuItem();
         exportXML = new javax.swing.JMenuItem();
 
+        taCampos.setColumns(20);
+        taCampos.setRows(5);
+        jScrollPane1.setViewportView(taCampos);
+
+        camposLabel.setText("Los campos disponibles para registros son los siguientes:");
+
+        javax.swing.GroupLayout listCamposPantallaLayout = new javax.swing.GroupLayout(listCamposPantalla.getContentPane());
+        listCamposPantalla.getContentPane().setLayout(listCamposPantallaLayout);
+        listCamposPantallaLayout.setHorizontalGroup(
+            listCamposPantallaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, listCamposPantallaLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(camposLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
+        listCamposPantallaLayout.setVerticalGroup(
+            listCamposPantallaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(listCamposPantallaLayout.createSequentialGroup()
+                .addGroup(listCamposPantallaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(listCamposPantallaLayout.createSequentialGroup()
+                        .addGap(135, 135, 135)
+                        .addComponent(camposLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(listCamposPantallaLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(42, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Archivo.setText("Archivo");
 
         newFile.setText("Nuevo Archivo");
+        newFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newFileActionPerformed(evt);
+            }
+        });
         Archivo.add(newFile);
 
         openFile.setText("Abrir Archivo");
+        openFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFileActionPerformed(evt);
+            }
+        });
         Archivo.add(openFile);
 
         saveFile.setText("Guardar Archivo");
+        saveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFileActionPerformed(evt);
+            }
+        });
         Archivo.add(saveFile);
 
         closeFile.setText("Cerrar Archivo");
@@ -77,9 +139,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Campos.setText("Campos");
 
         newCampo.setText("Nuevo Campo");
+        newCampo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newCampoActionPerformed(evt);
+            }
+        });
         Campos.add(newCampo);
 
         listCampos.setText("Listar Campos");
+        listCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listCamposActionPerformed(evt);
+            }
+        });
         Campos.add(listCampos);
 
         modCampos.setText("Modificar Campos");
@@ -135,15 +207,118 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 734, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGap(0, 402, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
+        // TODO add your handling code here:
+        JFileChooser jfc = new JFileChooser();//instanciar
+        //y agregar una extension que filtre
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de Texto", "txt");
+        jfc.addChoosableFileFilter(filtro);
+        int seleccion = jfc.showSaveDialog(this);//muestre la ventana 
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            try {
+                File fichero = null; //instancia es null porque hay que ponerlo en una extension
+                if (jfc.getFileFilter().getDescription().equals("Archivos de Texto")) { //si el filtro es archivo de texto
+                    fichero = new File(jfc.getSelectedFile().getPath() + ".txt");//agarre el archivo y concatene la extension
+
+                } else {
+                    fichero = jfc.getSelectedFile();//capture el selected file
+                }
+                fw = new FileWriter(fichero);//apunta al archivo
+                bw = new BufferedWriter(fw);//apunta al canal
+                bw.write("");
+                bw.flush();//pasar a rom
+                JOptionPane.showMessageDialog(this, "Archivo guardado excitosamente");
+            } catch (Exception e) {
+            }
+            try {
+                bw.close();
+                fw.close();
+            } catch (IOException ex) {
+            }
+        }
+    }//GEN-LAST:event_newFileActionPerformed
+
+    private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
+        // TODO add your handling code here:
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            JFileChooser jfc = new JFileChooser("./"); //donde deseamos que aparezca
+            //crear los filtros
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de Texto", "txt");
+            FileNameExtensionFilter filtro2 = new FileNameExtensionFilter("Imagenes", "jpg", "png", "bmp");
+            //setear los filtros
+            jfc.setFileFilter(filtro);//forma 1: marcado como seleccionado
+            jfc.addChoosableFileFilter(filtro2);//forma 2: agregarlo a la lista
+            int seleccion = jfc.showOpenDialog(this);
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                archivoCargado = jfc.getSelectedFile();//apunta hacia el objeto seleccionado
+                fr = new FileReader(archivoCargado);//apunta hacia el archivo
+                br = new BufferedReader(fr);//apunta hacia el fileReader
+            }
+        } catch (Exception e) {
+        }
+        try {
+            br.close();
+            fr.close();
+        } catch (IOException ex) {
+        }
+    }//GEN-LAST:event_openFileActionPerformed
+
+    private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
+        try {
+            FileWriter fw = null;
+            BufferedWriter bw = null;
+            String aux = "";
+            for (Object temp : campos) {
+                fw = new FileWriter(archivoCargado, false);
+                bw = new BufferedWriter(fw);
+                aux += temp.toString();
+                bw.write(aux);
+                bw.flush();
+            }
+            bw.close();
+            fw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(this, "EXITO", "El archivo se ha guardado correctamente", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_saveFileActionPerformed
+
+    private void newCampoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCampoActionPerformed
+        // TODO add your handling code here:
+        String campo = JOptionPane.showInputDialog("Ingrese el nuevo campo a anexar en los registros");
+        campo = campo.toUpperCase();
+        campo += "=";
+        JOptionPane.showMessageDialog(this, "Campo agregado exitosamente");
+        campos.add(campo);
+    }//GEN-LAST:event_newCampoActionPerformed
+
+    private void listCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listCamposActionPerformed
+        // TODO add your handling code here:
+        listCamposPantalla.pack();
+        listCamposPantalla.setLocationRelativeTo(this);
+        listCamposPantalla.setVisible(true);
+        String aux = "";
+        for (Object campo : campos) {
+            aux += campo.toString().replace('=', ' ');
+            aux += "\n";
+        }
+        taCampos.setText(aux);
+        taCampos.setEditable(false);
+    }//GEN-LAST:event_listCamposActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,13 +363,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu Indices;
     private javax.swing.JMenuBar MenuPrincipal;
     private javax.swing.JMenu Registros;
+    private javax.swing.JLabel camposLabel;
     private javax.swing.JMenuItem closeFile;
     private javax.swing.JMenuItem delCampos;
     private javax.swing.JMenuItem deleteRegistros;
     private javax.swing.JMenuItem exportExcel;
     private javax.swing.JMenuItem exportXML;
     private javax.swing.JMenuItem introRegistros;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuItem listCampos;
+    private javax.swing.JDialog listCamposPantalla;
     private javax.swing.JMenuItem listRegistros;
     private javax.swing.JMenuItem modCampos;
     private javax.swing.JMenuItem modRegistros;
@@ -205,5 +383,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem reindexFile;
     private javax.swing.JMenuItem saveFile;
     private javax.swing.JMenuItem searchRegistros;
+    private javax.swing.JTextArea taCampos;
     // End of variables declaration//GEN-END:variables
+    private LinkedList registros = new LinkedList();
+    private ArrayList campos = new ArrayList<String>();
+    private File archivoCargado;
 }
