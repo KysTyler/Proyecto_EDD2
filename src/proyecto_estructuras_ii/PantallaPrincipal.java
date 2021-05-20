@@ -108,6 +108,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel_BG.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -132,6 +133,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jLabel_BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Degradado.png"))); // NOI18N
         jPanel_BG.add(jLabel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 505));
+
+        getContentPane().add(jPanel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         Archivo.setText("Archivo");
         Archivo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -238,17 +241,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Estandarizacion);
 
         setJMenuBar(MenuPrincipal);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel_BG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel_BG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
