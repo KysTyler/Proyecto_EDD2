@@ -5,6 +5,8 @@
  */
 package proyecto_estructuras_ii;
 
+import java.awt.HeadlessException;
+import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.EOFException;
@@ -12,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -249,14 +252,15 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        // TODO add your handling code here:
         JFileChooser jfc = new JFileChooser("./");//instanciar
+
         //y agregar una extension que filtre
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de Texto", "txt");
         jfc.addChoosableFileFilter(filtro);
         int seleccion = jfc.showSaveDialog(this);//muestre la ventana 
-        FileWriter fw = null;
-        BufferedWriter bw = null;
+
+        PrintWriter pw = null;
+        
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             try {
                 File fichero = null; //instancia es null porque hay que ponerlo en una extension
@@ -264,28 +268,25 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                     fichero = new File(jfc.getSelectedFile().getPath() + ".txt");//agarre el archivo y concatene la extension
 
                 } else {
+                    int replace = JOptionPane.showConfirmDialog(this, "¿Desea reemplazar el archivo existente?", "Reemplazar archivo.", JOptionPane.YES_NO_OPTION);
+                    if (replace != JOptionPane.YES_OPTION) {
+                        return;
+                    }
                     fichero = jfc.getSelectedFile();//capture el selected file
                 }
-                fw = new FileWriter(fichero);//apunta al archivo
-                bw = new BufferedWriter(fw);//apunta al canal
-                bw.write("");
-                bw.flush();//pasar a rom
-                JOptionPane.showMessageDialog(this, "Archivo guardado exitosamente");
-            } catch (Exception e) {
-            } finally {
-                try {
-                    bw.close();
-                    fw.close();
-                } catch (IOException ex) {
-                }
+                pw = new PrintWriter(fichero);//apunta al archivo
+                pw.write("");
+                pw.flush();//pasar a rom
+                JOptionPane.showMessageDialog(this, "Archivo creado exitosamente.");
+                
+                loadFile(fichero);
+                
+            } catch (HeadlessException | FileNotFoundException e) {
             }
         }
     }//GEN-LAST:event_newFileActionPerformed
 
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
-        // TODO add your handling code here:
-        FileReader fr = null;
-        BufferedReader br = null;
         try {
             JFileChooser jfc = new JFileChooser("./"); //donde deseamos que aparezca
             //crear los filtros
@@ -296,33 +297,37 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             jfc.addChoosableFileFilter(filtro2);//forma 2: agregarlo a la lista
             int seleccion = jfc.showOpenDialog(this);
             if (seleccion == JFileChooser.APPROVE_OPTION) {
-                archivoCargado = jfc.getSelectedFile();//apunta hacia el objeto seleccionado
-                fr = new FileReader(archivoCargado);//apunta hacia el archivo
-                br = new BufferedReader(fr);//apunta hacia el fileReader
-                
-                jLabel_current.setText("Current file: " + archivoCargado.getName());
-                
-                try {
-                    String line = "";
-                    jTextArea_Display.setText("");
-                    while((line = br.readLine()) != null) {
-                        jTextArea_Display.append(line);
-                        jTextArea_Display.append("\n");
-                    }
-                } catch (EOFException e) {
-                }
-                
+                loadFile(jfc.getSelectedFile());
             }
         } catch (Exception e) {
-        } finally {
-            try {
-                br.close();
-                fr.close();
-            } catch (Exception ex) {
-            }
         }
     }//GEN-LAST:event_openFileActionPerformed
 
+    
+    private void loadFile(File file) {
+        if (file == null) return;
+        
+        archivoCargado = file;
+        
+        try (FileReader fr = new FileReader(archivoCargado);
+                BufferedReader br = new BufferedReader(fr);) {       
+            
+            jLabel_current.setText("Current file: " + archivoCargado.getName());
+
+            try {
+                String line = "";
+                jTextArea_Display.setText("");
+                while((line = br.readLine()) != null) {
+                    jTextArea_Display.append(line);
+                    jTextArea_Display.append("\n");
+                }
+            } catch (EOFException e) {
+            }
+        } catch (Exception e) {
+        }
+        
+    }
+    
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
         try {
             FileWriter fw = null;
