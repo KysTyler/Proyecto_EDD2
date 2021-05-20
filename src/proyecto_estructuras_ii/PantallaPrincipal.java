@@ -45,6 +45,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         taCampos = new javax.swing.JTextArea();
         camposLabel = new javax.swing.JLabel();
+        jPanel_BG = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel_Title = new javax.swing.JLabel();
+        jLabel_BG = new javax.swing.JLabel();
         MenuPrincipal = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         newFile = new javax.swing.JMenuItem();
@@ -101,6 +106,24 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel_BG.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
+        jPanel_BG.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 470, 300));
+
+        jLabel_Title.setFont(new java.awt.Font("BankGothic Md BT", 3, 36)); // NOI18N
+        jLabel_Title.setForeground(new java.awt.Color(255, 150, 119));
+        jLabel_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel_Title.setText("File X Manager");
+        jLabel_Title.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel_BG.add(jLabel_Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 370, -1));
+
+        jLabel_BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto_estructuras_ii/Degradado.png"))); // NOI18N
+        jPanel_BG.add(jLabel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 505));
 
         Archivo.setText("Archivo");
         Archivo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -212,11 +235,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 734, Short.MAX_VALUE)
+            .addComponent(jPanel_BG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 401, Short.MAX_VALUE)
+            .addComponent(jPanel_BG, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -244,7 +267,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 bw = new BufferedWriter(fw);//apunta al canal
                 bw.write("");
                 bw.flush();//pasar a rom
-                JOptionPane.showMessageDialog(this, "Archivo guardado excitosamente");
+                JOptionPane.showMessageDialog(this, "Archivo guardado exitosamente");
             } catch (Exception e) {
             } finally {
                 try {
@@ -376,7 +399,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem exportExcel;
     private javax.swing.JMenuItem exportXML;
     private javax.swing.JMenuItem introRegistros;
+    private javax.swing.JLabel jLabel_BG;
+    private javax.swing.JLabel jLabel_Title;
+    private javax.swing.JPanel jPanel_BG;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuItem listCampos;
     private javax.swing.JDialog listCamposPantalla;
     private javax.swing.JMenuItem listRegistros;
