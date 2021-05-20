@@ -224,7 +224,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
         // TODO add your handling code here:
-        JFileChooser jfc = new JFileChooser();//instanciar
+        JFileChooser jfc = new JFileChooser("./");//instanciar
         //y agregar una extension que filtre
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de Texto", "txt");
         jfc.addChoosableFileFilter(filtro);
@@ -246,11 +246,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 bw.flush();//pasar a rom
                 JOptionPane.showMessageDialog(this, "Archivo guardado excitosamente");
             } catch (Exception e) {
-            }
-            try {
-                bw.close();
-                fw.close();
-            } catch (IOException ex) {
+            } finally {
+                try {
+                    bw.close();
+                    fw.close();
+                } catch (IOException ex) {
+                }
             }
         }
     }//GEN-LAST:event_newFileActionPerformed
