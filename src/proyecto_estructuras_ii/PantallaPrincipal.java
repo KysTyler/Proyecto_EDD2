@@ -7,6 +7,7 @@ package proyecto_estructuras_ii;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.EOFException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -46,8 +47,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         taCampos = new javax.swing.JTextArea();
         camposLabel = new javax.swing.JLabel();
         jPanel_BG = new javax.swing.JPanel();
+        jLabel_current = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextArea_Display = new javax.swing.JTextArea();
         jLabel_Title = new javax.swing.JLabel();
         jLabel_BG = new javax.swing.JLabel();
         MenuPrincipal = new javax.swing.JMenuBar();
@@ -109,9 +111,15 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jPanel_BG.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        jLabel_current.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel_current.setForeground(new java.awt.Color(255, 150, 119));
+        jLabel_current.setText("Current File: ");
+        jPanel_BG.add(jLabel_current, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, 370, -1));
+
+        jTextArea_Display.setEditable(false);
+        jTextArea_Display.setColumns(20);
+        jTextArea_Display.setRows(5);
+        jScrollPane2.setViewportView(jTextArea_Display);
 
         jPanel_BG.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 470, 300));
 
@@ -296,13 +304,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 archivoCargado = jfc.getSelectedFile();//apunta hacia el objeto seleccionado
                 fr = new FileReader(archivoCargado);//apunta hacia el archivo
                 br = new BufferedReader(fr);//apunta hacia el fileReader
+                
+                jLabel_current.setText("Current file: " + archivoCargado.getName());
+                
+                try {
+                    String line = "";
+                    jTextArea_Display.setText("");
+                    while((line = br.readLine()) != null) {
+                        jTextArea_Display.append(line);
+                        jTextArea_Display.append("\n");
+                    }
+                } catch (EOFException e) {
+                }
+                
             }
         } catch (Exception e) {
-        }
-        try {
-            br.close();
-            fr.close();
-        } catch (IOException ex) {
+        } finally {
+            try {
+                br.close();
+                fr.close();
+            } catch (Exception ex) {
+            }
         }
     }//GEN-LAST:event_openFileActionPerformed
 
@@ -311,10 +333,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             FileWriter fw = null;
             BufferedWriter bw = null;
             String aux = "";
-            for (Object temp : campos) {
+            for (String temp : campos) {
                 fw = new FileWriter(archivoCargado, false);
                 bw = new BufferedWriter(fw);
-                aux += temp.toString();
+                aux += temp;
                 bw.write(aux);
                 bw.flush();
             }
@@ -401,10 +423,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem introRegistros;
     private javax.swing.JLabel jLabel_BG;
     private javax.swing.JLabel jLabel_Title;
+    private javax.swing.JLabel jLabel_current;
     private javax.swing.JPanel jPanel_BG;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea_Display;
     private javax.swing.JMenuItem listCampos;
     private javax.swing.JDialog listCamposPantalla;
     private javax.swing.JMenuItem listRegistros;
@@ -420,6 +443,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextArea taCampos;
     // End of variables declaration//GEN-END:variables
     private LinkedList registros = new LinkedList();
-    private ArrayList campos = new ArrayList<String>();
+    private ArrayList<String> campos = new ArrayList<String>();
     private File archivoCargado;
 }
