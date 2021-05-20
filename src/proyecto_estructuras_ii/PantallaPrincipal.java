@@ -260,7 +260,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         int seleccion = jfc.showSaveDialog(this);//muestre la ventana 
 
         PrintWriter pw = null;
-        
+
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             try {
                 File fichero = null; //instancia es null porque hay que ponerlo en una extension
@@ -278,9 +278,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 pw.write("");
                 pw.flush();//pasar a rom
                 JOptionPane.showMessageDialog(this, "Archivo creado exitosamente.");
-                
+
                 loadFile(fichero);
-                
+
             } catch (HeadlessException | FileNotFoundException e) {
             }
         }
@@ -299,25 +299,26 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             if (seleccion == JFileChooser.APPROVE_OPTION) {
                 loadFile(jfc.getSelectedFile());
             }
+            JOptionPane.showMessageDialog(this, "Archivo abierto exitosamente.");
         } catch (Exception e) {
         }
     }//GEN-LAST:event_openFileActionPerformed
 
-    
     private void loadFile(File file) {
-        if (file == null) return;
-        
+        if (file == null) {
+            return;
+        }
+
         archivoCargado = file;
-        
-        try (FileReader fr = new FileReader(archivoCargado);
-                BufferedReader br = new BufferedReader(fr);) {       
-            
+
+        try ( FileReader fr = new FileReader(archivoCargado);  BufferedReader br = new BufferedReader(fr);) {
+
             jLabel_current.setText("Current file: " + archivoCargado.getName());
 
             try {
                 String line = "";
                 jTextArea_Display.setText("");
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     jTextArea_Display.append(line);
                     jTextArea_Display.append("\n");
                 }
@@ -325,50 +326,62 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         } catch (Exception e) {
         }
-        
+
     }
-    
+
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-        try {
-            FileWriter fw = null;
-            BufferedWriter bw = null;
-            String aux = "";
-            for (String temp : campos) {
-                fw = new FileWriter(archivoCargado, false);
-                bw = new BufferedWriter(fw);
-                aux += temp;
-                bw.write(aux);
-                bw.flush();
+        if (archivoCargado != null) {
+            try {
+                FileWriter fw = null;
+                BufferedWriter bw = null;
+                String aux = "";
+                for (String temp : campos) {
+                    fw = new FileWriter(archivoCargado, false);
+                    bw = new BufferedWriter(fw);
+                    aux += temp;
+                    bw.write(aux);
+                    bw.flush();
+                }
+                bw.close();
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(PantallaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
-            bw.close();
-            fw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(PantallaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "EXITO", "El archivo se ha guardado correctamente", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "ERROR", "No hay un archivo  cargado para salvar", JOptionPane.ERROR_MESSAGE);
         }
-        JOptionPane.showMessageDialog(this, "EXITO", "El archivo se ha guardado correctamente", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_saveFileActionPerformed
 
     private void newCampoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCampoActionPerformed
         // TODO add your handling code here:
-        String campo = JOptionPane.showInputDialog("Ingrese el nuevo campo a anexar en los registros");
-        campo = campo.toUpperCase();
-        campo += "=";
-        JOptionPane.showMessageDialog(this, "Campo agregado exitosamente");
-        campos.add(campo);
+        if (archivoCargado != null) {
+            String campo = JOptionPane.showInputDialog("Ingrese el nuevo campo a anexar en los registros");
+            campo = campo.toUpperCase();
+            campo += "=";
+            JOptionPane.showMessageDialog(this, "Campo agregado exitosamente");
+            campos.add(campo);
+        } else {
+            JOptionPane.showMessageDialog(this, "ERROR", "No hay un archivo cargado para modificar sus campos", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_newCampoActionPerformed
 
     private void listCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listCamposActionPerformed
         // TODO add your handling code here:
-        listCamposPantalla.pack();
-        listCamposPantalla.setLocationRelativeTo(this);
-        listCamposPantalla.setVisible(true);
-        String aux = "";
-        for (Object campo : campos) {
-            aux += campo.toString().replace('=', ' ');
-            aux += "\n";
+        if (archivoCargado != null) {
+            listCamposPantalla.pack();
+            listCamposPantalla.setLocationRelativeTo(this);
+            listCamposPantalla.setVisible(true);
+            String aux = "";
+            for (Object campo : campos) {
+                aux += campo.toString().replace('=', ' ');
+                aux += "\n";
+            }
+            taCampos.setText(aux);
+            taCampos.setEditable(false);
+        } else {
+            JOptionPane.showMessageDialog(this, "ERROR", "No hay un archivo cargado para modificar sus campos", JOptionPane.ERROR_MESSAGE);
         }
-        taCampos.setText(aux);
-        taCampos.setEditable(false);
     }//GEN-LAST:event_listCamposActionPerformed
 
     /**
