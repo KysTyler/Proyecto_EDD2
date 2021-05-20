@@ -170,6 +170,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Archivo.add(saveFile);
 
         closeFile.setText("Cerrar Archivo");
+        closeFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeFileActionPerformed(evt);
+            }
+        });
         Archivo.add(closeFile);
 
         Exit.setText("Salir");
@@ -260,7 +265,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         int seleccion = jfc.showSaveDialog(this);//muestre la ventana 
 
         PrintWriter pw = null;
-
+        
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             try {
                 File fichero = null; //instancia es null porque hay que ponerlo en una extension
@@ -278,9 +283,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 pw.write("");
                 pw.flush();//pasar a rom
                 JOptionPane.showMessageDialog(this, "Archivo creado exitosamente.");
-
+                
                 loadFile(fichero);
-
+                
             } catch (HeadlessException | FileNotFoundException e) {
             }
         }
@@ -303,18 +308,18 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }//GEN-LAST:event_openFileActionPerformed
-
+    
     private void loadFile(File file) {
         if (file == null) {
             return;
         }
-
+        
         archivoCargado = file;
-
+        
         try ( FileReader fr = new FileReader(archivoCargado);  BufferedReader br = new BufferedReader(fr);) {
-
+            
             jLabel_current.setText("Current file: " + archivoCargado.getName());
-
+            
             try {
                 String line = "";
                 jTextArea_Display.setText("");
@@ -326,7 +331,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         } catch (Exception e) {
         }
-
+        
     }
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
@@ -383,6 +388,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "ERROR", "No hay un archivo cargado para modificar sus campos", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_listCamposActionPerformed
+
+    private void closeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileActionPerformed
+        if (archivoCargado != null) {
+            int seleccion = JOptionPane.showConfirmDialog(rootPane, newFile);
+            if (seleccion == 0) {
+                saveFileActionPerformed(evt);
+            }
+        }
+        System.exit(0);
+    }//GEN-LAST:event_closeFileActionPerformed
 
     /**
      * @param args the command line arguments
