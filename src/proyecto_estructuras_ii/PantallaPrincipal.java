@@ -5,23 +5,18 @@
  */
 package proyecto_estructuras_ii;
 
-import java.awt.HeadlessException;
-import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.EOFException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -50,12 +45,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         taCampos = new javax.swing.JTextArea();
         camposLabel = new javax.swing.JLabel();
-        jPanel_BG = new javax.swing.JPanel();
-        jLabel_current = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea_Display = new javax.swing.JTextArea();
-        jLabel_Title = new javax.swing.JLabel();
-        jLabel_BG = new javax.swing.JLabel();
         MenuPrincipal = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         newFile = new javax.swing.JMenuItem();
@@ -112,38 +101,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setIconImage(new ImageIcon("src/recursos/x.png").getImage());
-        setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel_BG.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel_current.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel_current.setForeground(new java.awt.Color(255, 150, 119));
-        jLabel_current.setText("Current File: ");
-        jPanel_BG.add(jLabel_current, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 80, 370, -1));
-
-        jTextArea_Display.setEditable(false);
-        jTextArea_Display.setColumns(20);
-        jTextArea_Display.setRows(5);
-        jScrollPane2.setViewportView(jTextArea_Display);
-
-        jPanel_BG.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 470, 300));
-
-        jLabel_Title.setFont(new java.awt.Font("BankGothic Md BT", 3, 36)); // NOI18N
-        jLabel_Title.setForeground(new java.awt.Color(255, 150, 119));
-        jLabel_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel_Title.setText("File X Manager");
-        jLabel_Title.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel_BG.add(jLabel_Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 370, -1));
-
-        jLabel_BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/Degradado.png"))); // NOI18N
-        jPanel_BG.add(jLabel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 530));
-
-        getContentPane().add(jPanel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         Archivo.setText("Archivo");
-        Archivo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newFile.setText("Nuevo Archivo");
         newFile.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +137,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Archivo);
 
         Campos.setText("Campos");
-        Campos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newCampo.setText("Nuevo Campo");
         newCampo.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +163,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Campos);
 
         Registros.setText("Registros");
-        Registros.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         introRegistros.setText("Introducir Registros");
         Registros.add(introRegistros);
@@ -225,7 +182,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Registros);
 
         Indices.setText("Indices");
-        Indices.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newIndex.setText("Crear Indices");
         Indices.add(newIndex);
@@ -236,7 +192,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Indices);
 
         Estandarizacion.setText("Estandarizacion");
-        Estandarizacion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         exportExcel.setText("Exportar en archivo Excel");
         Estandarizacion.add(exportExcel);
@@ -248,19 +203,29 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         setJMenuBar(MenuPrincipal);
 
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 734, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 402, Short.MAX_VALUE)
+        );
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        JFileChooser jfc = new JFileChooser("./");//instanciar
-
+        // TODO add your handling code here:
+        JFileChooser jfc = new JFileChooser();//instanciar
         //y agregar una extension que filtre
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de Texto", "txt");
         jfc.addChoosableFileFilter(filtro);
         int seleccion = jfc.showSaveDialog(this);//muestre la ventana 
-
-        PrintWriter pw = null;
-        
+        FileWriter fw = null;
+        BufferedWriter bw = null;
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             try {
                 File fichero = null; //instancia es null porque hay que ponerlo en una extension
@@ -268,25 +233,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                     fichero = new File(jfc.getSelectedFile().getPath() + ".txt");//agarre el archivo y concatene la extension
 
                 } else {
-                    int replace = JOptionPane.showConfirmDialog(this, "¿Desea reemplazar el archivo existente?", "Reemplazar archivo.", JOptionPane.YES_NO_OPTION);
-                    if (replace != JOptionPane.YES_OPTION) {
-                        return;
-                    }
                     fichero = jfc.getSelectedFile();//capture el selected file
                 }
-                pw = new PrintWriter(fichero);//apunta al archivo
-                pw.write("");
-                pw.flush();//pasar a rom
-                JOptionPane.showMessageDialog(this, "Archivo creado exitosamente.");
-                
-                loadFile(fichero);
-                
-            } catch (HeadlessException | FileNotFoundException e) {
+                fw = new FileWriter(fichero);//apunta al archivo
+                bw = new BufferedWriter(fw);//apunta al canal
+                bw.write("");
+                bw.flush();//pasar a rom
+                JOptionPane.showMessageDialog(this, "Archivo guardado excitosamente");
+            } catch (Exception e) {
+            }
+            try {
+                bw.close();
+                fw.close();
+            } catch (IOException ex) {
             }
         }
     }//GEN-LAST:event_newFileActionPerformed
 
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
+        // TODO add your handling code here:
+        FileReader fr = null;
+        BufferedReader br = null;
         try {
             JFileChooser jfc = new JFileChooser("./"); //donde deseamos que aparezca
             //crear los filtros
@@ -297,46 +264,28 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             jfc.addChoosableFileFilter(filtro2);//forma 2: agregarlo a la lista
             int seleccion = jfc.showOpenDialog(this);
             if (seleccion == JFileChooser.APPROVE_OPTION) {
-                loadFile(jfc.getSelectedFile());
+                archivoCargado = jfc.getSelectedFile();//apunta hacia el objeto seleccionado
+                fr = new FileReader(archivoCargado);//apunta hacia el archivo
+                br = new BufferedReader(fr);//apunta hacia el fileReader
             }
         } catch (Exception e) {
+        }
+        try {
+            br.close();
+            fr.close();
+        } catch (IOException ex) {
         }
     }//GEN-LAST:event_openFileActionPerformed
 
-    
-    private void loadFile(File file) {
-        if (file == null) return;
-        
-        archivoCargado = file;
-        
-        try (FileReader fr = new FileReader(archivoCargado);
-                BufferedReader br = new BufferedReader(fr);) {       
-            
-            jLabel_current.setText("Current file: " + archivoCargado.getName());
-
-            try {
-                String line = "";
-                jTextArea_Display.setText("");
-                while((line = br.readLine()) != null) {
-                    jTextArea_Display.append(line);
-                    jTextArea_Display.append("\n");
-                }
-            } catch (EOFException e) {
-            }
-        } catch (Exception e) {
-        }
-        
-    }
-    
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
         try {
             FileWriter fw = null;
             BufferedWriter bw = null;
             String aux = "";
-            for (String temp : campos) {
+            for (Object temp : campos) {
                 fw = new FileWriter(archivoCargado, false);
                 bw = new BufferedWriter(fw);
-                aux += temp;
+                aux += temp.toString();
                 bw.write(aux);
                 bw.flush();
             }
@@ -421,13 +370,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem exportExcel;
     private javax.swing.JMenuItem exportXML;
     private javax.swing.JMenuItem introRegistros;
-    private javax.swing.JLabel jLabel_BG;
-    private javax.swing.JLabel jLabel_Title;
-    private javax.swing.JLabel jLabel_current;
-    private javax.swing.JPanel jPanel_BG;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea_Display;
     private javax.swing.JMenuItem listCampos;
     private javax.swing.JDialog listCamposPantalla;
     private javax.swing.JMenuItem listRegistros;
@@ -443,6 +386,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextArea taCampos;
     // End of variables declaration//GEN-END:variables
     private LinkedList registros = new LinkedList();
-    private ArrayList<String> campos = new ArrayList<String>();
+    private ArrayList campos = new ArrayList<String>();
     private File archivoCargado;
 }
