@@ -103,6 +103,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Archivo.setText("Archivo");
+        Archivo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newFile.setText("Nuevo Archivo");
         newFile.addActionListener(new java.awt.event.ActionListener() {
@@ -137,6 +138,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Archivo);
 
         Campos.setText("Campos");
+        Campos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newCampo.setText("Nuevo Campo");
         newCampo.addActionListener(new java.awt.event.ActionListener() {
@@ -163,6 +165,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Campos);
 
         Registros.setText("Registros");
+        Registros.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         introRegistros.setText("Introducir Registros");
         Registros.add(introRegistros);
@@ -182,6 +185,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Registros);
 
         Indices.setText("Indices");
+        Indices.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         newIndex.setText("Crear Indices");
         Indices.add(newIndex);
@@ -192,6 +196,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         MenuPrincipal.add(Indices);
 
         Estandarizacion.setText("Estandarizacion");
+        Estandarizacion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         exportExcel.setText("Exportar en archivo Excel");
         Estandarizacion.add(exportExcel);
@@ -211,7 +216,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 402, Short.MAX_VALUE)
+            .addGap(0, 401, Short.MAX_VALUE)
         );
 
         pack();
