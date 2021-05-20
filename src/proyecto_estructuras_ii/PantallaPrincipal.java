@@ -59,6 +59,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         exportXML = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(new javax.swing.ImageIcon("src/resources/x1.png").getImage());
         setResizable(false);
 
         jPanel_BG.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -79,9 +80,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabel_FileX.setFocusable(false);
         jPanel_BG.add(jLabel_FileX, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 360, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto_estructuras_ii/bg4.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/bg4.png"))); // NOI18N
         jLabel1.setFocusable(false);
-        jPanel_BG.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 1130, 630));
+        jPanel_BG.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 630));
 
         Archivo.setText("Archivo");
         Archivo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -172,9 +173,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel_BG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel_BG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
