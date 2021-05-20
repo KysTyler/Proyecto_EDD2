@@ -130,7 +130,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabel_Title.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel_BG.add(jLabel_Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 370, -1));
 
-        jLabel_BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto_estructuras_ii/Degradado.png"))); // NOI18N
+        jLabel_BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Degradado.png"))); // NOI18N
         jPanel_BG.add(jLabel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 505));
 
         Archivo.setText("Archivo");
