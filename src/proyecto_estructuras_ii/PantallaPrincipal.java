@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -108,6 +109,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(new ImageIcon("src/recursos/x.png").getImage());
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel_BG.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -131,8 +134,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabel_Title.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel_BG.add(jLabel_Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 370, -1));
 
-        jLabel_BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Degradado.png"))); // NOI18N
-        jPanel_BG.add(jLabel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 505));
+        jLabel_BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/Degradado.png"))); // NOI18N
+        jPanel_BG.add(jLabel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1130, 530));
 
         getContentPane().add(jPanel_BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
