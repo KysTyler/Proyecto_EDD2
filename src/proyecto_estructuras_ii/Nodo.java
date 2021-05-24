@@ -2,9 +2,9 @@ package proyecto_estructuras_ii;
 
 
 
-public class Nodo {
+public class Nodo<T> {
 
-    private Object data;
+    private T data;
     private Nodo siguiente;
     private Nodo anterior;
 
@@ -14,21 +14,17 @@ public class Nodo {
         this.data = null;
     }
 
-    public Nodo(Object data) {
-        siguiente = null;
-        anterior = null;
-        if (data != null) {
-            this.data = data;
-        } else {
-            this.data = null;
-        }
+    public Nodo(T data) {
+        this.siguiente = null;
+        this.anterior = null;
+        this.data = data;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 
