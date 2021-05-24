@@ -137,11 +137,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar Campos"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="modCamposActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="delCampos">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Eliminar Campos"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="delCamposActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

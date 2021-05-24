@@ -18,7 +18,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -216,9 +222,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Campos.add(listCampos);
 
         modCampos.setText("Modificar Campos");
+        modCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modCamposActionPerformed(evt);
+            }
+        });
         Campos.add(modCampos);
 
         delCampos.setText("Eliminar Campos");
+        delCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delCamposActionPerformed(evt);
+            }
+        });
         Campos.add(delCampos);
 
         MenuPrincipal.add(Campos);
@@ -271,8 +287,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        closeFileActionPerformed(evt);
-        
+
+        if (archivoCargado != null) {
+            closeFileActionPerformed(evt); //Al correr el programa y abrir el primer archivo hace una corrida de esta linea, la cual no deberia pasar
+            // porque por default no hay archivo cargado
+        }
+
         JFileChooser jfc = new JFileChooser("./");//instanciar
 
         //y agregar una extension que filtre
@@ -281,7 +301,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         int seleccion = jfc.showSaveDialog(this);//muestre la ventana 
 
         PrintWriter pw = null;
-        
+
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             try {
                 File fichero = null; //instancia es null porque hay que ponerlo en una extension
@@ -289,21 +309,24 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                     fichero = new File(jfc.getSelectedFile().getPath() + ".txt");//agarre el archivo y concatene la extension
 
                 } else {
-                    int replace = JOptionPane.showConfirmDialog(this, "¿Desea reemplazar el archivo existente?", "Reemplazar archivo.", JOptionPane.YES_NO_OPTION);
+                    int replace = JOptionPane.showConfirmDialog(this, "¿Desea "
+                            + "reemplazar el archivo existente?", "Reemplazar archivo.",
+                            JOptionPane.YES_NO_OPTION);
                     if (replace != JOptionPane.YES_OPTION) {
                         return;
                     }
                     fichero = jfc.getSelectedFile();//capture el selected file
                 }
                 pw = new PrintWriter(fichero);//apunta al archivo
+                pw.write(InsertMetadata());
                 pw.write("");
                 pw.flush();//pasar a rom
                 JOptionPane.showMessageDialog(this, "Archivo creado exitosamente.");
-                
+
                 archivoCargado = fichero;
                 jLabel_current.setText("Current file: " + archivoCargado.getName());
                 jTable_Display.setModel(new DefaultTableModel(0, 0));
-                
+
                 pw.close();
 
             } catch (HeadlessException | FileNotFoundException e) {
@@ -311,81 +334,143 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_newFileActionPerformed
 
+    public String InsertMetadata() {
+        /*
+        RRN,Delimeter,#Registros,Campos,Version,Modified by,Last time modified,Date created
+         */
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd hh:mm:ss");
+        String strDateCreated = dateFormat.format(date) + "?";
+        String campos = "" + "?";
+        String delimeter = "|" + "?";
+        String RRN = "" + "?";
+        String numRegistros = "0" + "?";
+        String lastestMod = System.getProperty("user.name");
+        String Final = RRN + numRegistros + campos + delimeter + strDateCreated + lastestMod;
+        return Final;
+
+    }
+
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
         try {
-            
-            closeFileActionPerformed(evt);
-            
+            if (archivoCargado != null) {
+                closeFileActionPerformed(evt); //Al correr el programa y abrir el primer archivo hace una corrida de esta linea, la cual no deberia pasar
+                // porque por default no hay archivo cargado
+            }
             JFileChooser jfc = new JFileChooser("./"); //donde deseamos que aparezca
-            
+
             //crear los filtros
             FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de Texto", "txt");
             FileNameExtensionFilter filtro2 = new FileNameExtensionFilter("Imagenes", "jpg", "png", "bmp");
-            
+
             //setear los filtros
             jfc.setFileFilter(filtro);//forma 1: marcado como seleccionado
             jfc.addChoosableFileFilter(filtro2);//forma 2: agregarlo a la lista
             int seleccion = jfc.showOpenDialog(this);
             if (seleccion == JFileChooser.APPROVE_OPTION) {
                 loadFile(jfc.getSelectedFile());
+
             }
         } catch (Exception e) {
         }
     }//GEN-LAST:event_openFileActionPerformed
-    
+
     private boolean verifyOpen() {
         if (archivoCargado == null) {
-            JOptionPane.showMessageDialog(this, "Debe abrir un archivo para realizar esa operación.", "No hay un archivo abierto", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe abrir un archivo para "
+                    + "realizar esa operación.", "No hay un archivo abierto",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
             return true;
         }
     }
-    
+
     private void loadFile(File file) {
-        if (file == null) return;
-        
+        if (file == null) {
+            return;
+        }
+        Scanner sc = null;
         archivoCargado = file;
         jLabel_current.setText("Current file: " + archivoCargado.getName());
         jTable_Display.setModel(new DefaultTableModel(0, 0));
-        
-        try (FileReader fr = new FileReader(archivoCargado);
-                BufferedReader br = new BufferedReader(fr)) {       
-            
+
+        try (FileReader fr = new FileReader(archivoCargado); BufferedReader br = new BufferedReader(fr)) {
+
+            try {
+                sc = new Scanner(archivoCargado);
+                sc.useDelimiter(";");
+                boolean flag = true;
+                while (sc.hasNext()) {
+                    if (flag) {
+                        String line = sc.nextLine();
+                        System.out.println("line+" + line);
+                        String[] data = line.split("\\?");
+                        String[] dataColumn = data[2].split("\\|");
+                        for (int i = 0; i < dataColumn.length; i++) {
+                            System.out.println("datacol" + dataColumn[i]);
+                        }
+                        for (int i = 0; i < dataColumn.length; i++) {//Para cargar los registros en memoria una vez se abre el archivo
+                            campos.add(dataColumn[i]);
+                        }
+                        DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+                        model.setColumnIdentifiers(dataColumn);
+                        flag = false;
+                    }
+
+                }
+            } catch (Exception e) {
+
+            }
 //            try {
-                String line = br.readLine();
-//                while((line = br.readLine()) != null) {
-                    String[] data = line.split("\\|");
-                    
-                    DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
-                    model.setColumnIdentifiers(data);
-                    
-//                }
+//            String line = br.readLine();
+////                while((line = br.readLine()) != null) {
+//            String[] data = line.split("\\|");
+//
+//            DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+//            model.setColumnIdentifiers(data);
+//
+////                }
 //            } catch (EOFException e) {
 //            }
         } catch (Exception e) {
-        }    
+        }
     }
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-        if (!verifyOpen()) return;
-        
-        if (saved) return;
-        
+        if (!verifyOpen()) {
+            return;
+        }
+
+        if (saved) {
+            return;
+        }
+
         try {
             FileWriter fw = null;
             BufferedWriter bw = null;
+            Scanner sc = null;
+            sc = new Scanner(archivoCargado);
+            String line = sc.nextLine();
+            String[] metadata = line.split("\\?");
             String aux = "";
             for (String temp : campos) {
                 fw = new FileWriter(archivoCargado, false);
                 bw = new BufferedWriter(fw);
                 aux += temp + "|";
-                bw.write(aux);
-                bw.flush();
             }
+            metadata[2] = aux;
+            String aux2 = Arrays.toString(metadata);
+            String str_ = aux2.replaceAll(",", "?");
+            String str1_ = str_.replaceAll("\\s+", "");
+            String str2_ = str1_.replaceAll("\\[", "");
+            String str3_ = str2_.replaceAll("\\]", "");
+            bw.write(str3_);
+            bw.flush();
             bw.close();
             fw.close();
-            JOptionPane.showMessageDialog(this, "El archivo se ha guardado correctamente", "EXITO", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El archivo se ha guardado "
+                    + "correctamente", "EXITO", JOptionPane.INFORMATION_MESSAGE);
             saved = true;
         } catch (IOException ex) {
             Logger.getLogger(PantallaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -393,13 +478,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_saveFileActionPerformed
 
     private void newCampoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCampoActionPerformed
-        if (!verifyOpen()) return;
-        
-        String campo = JOptionPane.showInputDialog("Ingrese el nuevo campo a anexar en los registros:");
-        
+        if (!verifyOpen()) {
+            return;
+        }
+
+        String campo = JOptionPane.showInputDialog("Ingrese el nuevo campo a "
+                + "anexar en los registros:");
+
         campo = campo.toUpperCase();
-        
-        if (campo != "" && !campos.contains(campo)) {    
+
+        if (campo != "" && !campos.contains(campo)) {
             DefaultTableModel m = (DefaultTableModel) jTable_Display.getModel();
             m.addColumn(campo);
             jTable_Display.setModel(m);
@@ -407,19 +495,21 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             campos.add(campo);
             saved = false;
         } else {
-            JOptionPane.showMessageDialog(this, "El campo ya existe.", "No se puede añadir el campo", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El campo ya existe.", "No se"
+                    + " puede añadir el campo", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_newCampoActionPerformed
 
     private void listCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listCamposActionPerformed
-        if (!verifyOpen()) return;
-        
+        if (!verifyOpen()) {
+            return;
+        }
         listCamposPantalla.pack();
         listCamposPantalla.setLocationRelativeTo(this);
         listCamposPantalla.setVisible(true);
         String aux = "";
         for (String campo : campos) {
-            aux += campo.substring(0, campo.length() - 1);
+            aux += campo.substring(0, campo.length());//Correccion, el .lenght()-1 listaba sin la ultima letra de cada campo
             aux += "\n";
         }
         taCampos.setText(aux);
@@ -428,8 +518,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void closeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileActionPerformed
         if (!saved) {
-            int save = JOptionPane.showConfirmDialog(this, "¿Desea guardar el archivo antes de salir?", "Guardar y cerrar.", JOptionPane.YES_NO_OPTION);
-            if (save == JOptionPane.YES_OPTION) saveFileActionPerformed(evt);
+            int save = JOptionPane.showConfirmDialog(this, "¿Desea guardar el "
+                    + "archivo antes de salir?", "Guardar y cerrar.",
+                    JOptionPane.YES_NO_OPTION);
+            if (save == JOptionPane.YES_OPTION) {
+                saveFileActionPerformed(evt);
+            }
             saved = true;
         }
         jLabel_current.setText("Current File:");
@@ -439,11 +533,66 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitActionPerformed
         if (!saved) {
-            int save = JOptionPane.showConfirmDialog(this, "¿Desea guardar el archivo antes de salir?", "Guardar y cerrar.", JOptionPane.YES_NO_OPTION);
-            if (save == JOptionPane.YES_OPTION) saveFileActionPerformed(evt);
+            int save = JOptionPane.showConfirmDialog(this, "¿Desea guardar el "
+                    + "archivo antes de salir?", "Guardar y cerrar.", JOptionPane.YES_NO_OPTION);
+            if (save == JOptionPane.YES_OPTION) {
+                saveFileActionPerformed(evt);
+            }
         }
         System.exit(0);
     }//GEN-LAST:event_ExitActionPerformed
+
+    private void delCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delCamposActionPerformed
+        String campoEliminar = JOptionPane.showInputDialog(this, "Ingrese el "
+                + "nombre del campo a eliminar");
+        for (String campo : campos) {
+            String aux = campo.substring(0, campo.length());
+            if (aux.equals(campoEliminar)) {
+                campos.remove(campo);
+                JOptionPane.showMessageDialog(this, "Campo eliminado con exito",
+                        "REALIZADO", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            } else {
+                JOptionPane.showMessageDialog(this, "El campo ingresado debe ser"
+                        + " EXACTAMENTE el mismo nombre que el campo a eliminar",
+                        "VERIFICAR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        String[] campos_ = new String[campos.size()];
+        for (int i = 0; i < campos.size(); i++) {
+            campos_[i] = campos.get(i);
+        }
+        DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+        model.setColumnIdentifiers(campos_);
+    }//GEN-LAST:event_delCamposActionPerformed
+
+    private void modCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modCamposActionPerformed
+        String campoModificar = JOptionPane.showInputDialog(this, "Ingrese el "
+                + "nombre del campo a modificar");
+        String modificacion = JOptionPane.showInputDialog(this, "Ingrese el "
+                + " nuevo nombre del campo");
+        String modificacion_ = modificacion.toUpperCase();
+        boolean flag = false;
+        for (int i = 0; i < campos.size(); i++) {
+            String temp = campos.get(i);
+            if (temp.equals(campoModificar)) {
+                campos.set(i, modificacion_);
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            JOptionPane.showMessageDialog(this, "El campo ingresado debe ser"
+                    + " EXACTAMENTE el mismo nombre que el campo a eliminar",
+                    "VERIFICAR", JOptionPane.ERROR_MESSAGE);
+        }
+        String[] campos_ = new String[campos.size()];
+        for (int i = 0; i < campos.size(); i++) {
+            campos_[i] = campos.get(i);
+        }
+        DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+        model.setColumnIdentifiers(campos_);
+    }//GEN-LAST:event_modCamposActionPerformed
 
     /**
      * @param args the command line arguments
@@ -516,9 +665,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem searchRegistros;
     private javax.swing.JTextArea taCampos;
     // End of variables declaration//GEN-END:variables
-    
+
     private LinkedList registros = new LinkedList();
     private ArrayList<String> campos = new ArrayList<String>();
     private File archivoCargado;
-    private boolean saved = true;
+    private boolean saved = false; //debe inicializarse en false porque por default el archivo no se ha guardado, hayasé modificado o no
 }
