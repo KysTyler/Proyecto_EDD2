@@ -18,7 +18,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -312,6 +318,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                     fichero = jfc.getSelectedFile();//capture el selected file
                 }
                 pw = new PrintWriter(fichero);//apunta al archivo
+                pw.write(InsertMetadata());
                 pw.write("");
                 pw.flush();//pasar a rom
                 JOptionPane.showMessageDialog(this, "Archivo creado exitosamente.");
@@ -326,6 +333,23 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_newFileActionPerformed
+
+    public String InsertMetadata() {
+        /*
+        RRN,Delimeter,#Registros,Campos,Version,Modified by,Last time modified,Date created
+         */
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yy-mm-dd hh:mm:ss");
+        String strDateCreated = dateFormat.format(date) + "?";
+        String campos = "" + "?";
+        String delimeter = "|" + "?";
+        String RRN = "" + "?";
+        String numRegistros = "0" + "?";
+        String lastestMod = System.getProperty("user.name");
+        String Final = RRN + numRegistros + campos + delimeter + strDateCreated + lastestMod;
+        return Final;
+
+    }
 
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
         try {
@@ -366,25 +390,47 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         if (file == null) {
             return;
         }
-
+        Scanner sc = null;
         archivoCargado = file;
         jLabel_current.setText("Current file: " + archivoCargado.getName());
         jTable_Display.setModel(new DefaultTableModel(0, 0));
 
-        try ( FileReader fr = new FileReader(archivoCargado);  BufferedReader br = new BufferedReader(fr)) {
+        try (FileReader fr = new FileReader(archivoCargado); BufferedReader br = new BufferedReader(fr)) {
 
-//            try {
-            String line = br.readLine();
-//                while((line = br.readLine()) != null) {
-            String[] data = line.split("\\|");
+            try {
+                sc = new Scanner(archivoCargado);
+                sc.useDelimiter(";");
+                boolean flag = true;
+                while (sc.hasNext()) {
+                    if (flag) {
+                        String line = sc.nextLine();
+                        System.out.println("line+" + line);
+                        String[] data = line.split("\\?");
+                        String[] dataColumn = data[2].split("\\|");
+                        for (int i = 0; i < dataColumn.length; i++) {
+                            System.out.println("datacol" + dataColumn[i]);
+                        }
+                        for (int i = 0; i < dataColumn.length; i++) {//Para cargar los registros en memoria una vez se abre el archivo
+                            campos.add(dataColumn[i]);
+                        }
+                        DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+                        model.setColumnIdentifiers(dataColumn);
+                        flag = false;
+                    }
 
-            for (int i = 0; i < data.length; i++) {//Para cargar los registros en memoria una vez se abre el archivo
-                campos.add(data[i]);
+                }
+            } catch (Exception e) {
+
             }
-            DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
-            model.setColumnIdentifiers(data);
-
-//                }
+//            try {
+//            String line = br.readLine();
+////                while((line = br.readLine()) != null) {
+//            String[] data = line.split("\\|");
+//
+//            DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+//            model.setColumnIdentifiers(data);
+//
+////                }
 //            } catch (EOFException e) {
 //            }
         } catch (Exception e) {
@@ -403,14 +449,24 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         try {
             FileWriter fw = null;
             BufferedWriter bw = null;
+            Scanner sc = null;
+            sc = new Scanner(archivoCargado);
+            String line = sc.nextLine();
+            String[] metadata = line.split("\\?");
             String aux = "";
             for (String temp : campos) {
                 fw = new FileWriter(archivoCargado, false);
                 bw = new BufferedWriter(fw);
                 aux += temp + "|";
-                bw.write(aux);
-                bw.flush();
             }
+            metadata[2] = aux;
+            String aux2 = Arrays.toString(metadata);
+            String str_ = aux2.replaceAll(",", "?");
+            String str1_ = str_.replaceAll("\\s+", "");
+            String str2_ = str1_.replaceAll("\\[", "");
+            String str3_ = str2_.replaceAll("\\]", "");
+            bw.write(str3_);
+            bw.flush();
             bw.close();
             fw.close();
             JOptionPane.showMessageDialog(this, "El archivo se ha guardado "
@@ -502,6 +558,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                         "VERIFICAR", JOptionPane.ERROR_MESSAGE);
             }
         }
+        String[] campos_ = new String[campos.size()];
+        for (int i = 0; i < campos.size(); i++) {
+            campos_[i] = campos.get(i);
+        }
+        DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+        model.setColumnIdentifiers(campos_);
     }//GEN-LAST:event_delCamposActionPerformed
 
     private void modCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modCamposActionPerformed
@@ -509,19 +571,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 + "nombre del campo a modificar");
         String modificacion = JOptionPane.showInputDialog(this, "Ingrese el "
                 + " nuevo nombre del campo");
+        String modificacion_ = modificacion.toUpperCase();
+        boolean flag = false;
         for (int i = 0; i < campos.size(); i++) {
             String temp = campos.get(i);
-            String aux = temp.substring(0, temp.length());
-            if (aux.equals(campoModificar)) {
-                campos.set(i, modificacion);
-                break;
-            } else {
-                JOptionPane.showMessageDialog(this, "El campo ingresado debe ser"
-                        + " EXACTAMENTE el mismo nombre que el campo a eliminar",
-                        "VERIFICAR", JOptionPane.ERROR_MESSAGE);
+            if (temp.equals(campoModificar)) {
+                campos.set(i, modificacion_);
+                flag = true;
                 break;
             }
         }
+        if (!flag) {
+            JOptionPane.showMessageDialog(this, "El campo ingresado debe ser"
+                    + " EXACTAMENTE el mismo nombre que el campo a eliminar",
+                    "VERIFICAR", JOptionPane.ERROR_MESSAGE);
+        }
+        String[] campos_ = new String[campos.size()];
+        for (int i = 0; i < campos.size(); i++) {
+            campos_[i] = campos.get(i);
+        }
+        DefaultTableModel model = (DefaultTableModel) jTable_Display.getModel();
+        model.setColumnIdentifiers(campos_);
     }//GEN-LAST:event_modCamposActionPerformed
 
     /**
