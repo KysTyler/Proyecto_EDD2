@@ -3,6 +3,7 @@
 /build
 *.txt
 *.properties
+*.xml
 
 # Compiled class file
 *.class
